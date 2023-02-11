@@ -1,5 +1,6 @@
 require('dotenv').config()
 const puppeteer = require('puppeteer')
+const MongoClient = require('mongodb').MongoClient
 
 async function scrape() {
     try {
@@ -17,6 +18,18 @@ async function scrape() {
             }))
         )
         console.log('Finished scraping')
+        // open connection to database
+        const client = await MongoClient.connect(process.env.CONNECTION_STRING)
+        console.log('Connected to database')
+        const DB = client.db(process.env.DB)
+        const COLLECTION = DB.collection(process.env.COLLECTION)
+
+        console.log('Inserting countries into database')
+        await COLLECTION.insertMany(countries)
+        console.log('Finished inserting countries into database')
+
+        // close connection to database
+        await client.close()
 
         await browser.close()
     }
