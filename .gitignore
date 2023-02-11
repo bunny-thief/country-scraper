@@ -5,3 +5,7 @@ node_modules/
 ### Backup JS files ###
 #######################
 server.js
+
+### dotenv ###
+##############
+.env
